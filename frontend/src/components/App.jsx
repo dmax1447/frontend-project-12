@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import '../assets/styles/application.scss';
 import {
   BrowserRouter as Router,
   Routes,
@@ -19,9 +20,12 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem('userId');
     setLoggedIn(false);
   };
+  const authContextValue = useMemo(() => ({
+    loggedIn, logIn, logOut,
+  }), [loggedIn]);
 
   return (
-    <AuthContext.Provider value={{ loggedIn, logIn, logOut }}>
+    <AuthContext.Provider value={authContextValue}>
       {children}
     </AuthContext.Provider>
   );
@@ -38,12 +42,23 @@ const AuthProvider = ({ children }) => {
 const App = () => (
   <AuthProvider>
     <Router>
-      <header>Hexlet CHAT</header>
-      <Routes>
-        <Route path="/" element={<MainPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+      <main className="d-flex flex-column h-100">
+        <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
+          <div className="container">
+            <a className="navbar-brand" href="/">Hexlet CHAT</a>
+          </div>
+        </nav>
+        <div className="container-fluid h-100">
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+
+        </div>
+
+      </main>
+
     </Router>
   </AuthProvider>
 );
