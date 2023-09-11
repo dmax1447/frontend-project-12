@@ -3,7 +3,13 @@ import { useFormik } from 'formik';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button, Form } from 'react-bootstrap';
+import * as yup from 'yup';
 import useAuth from '../hooks/index.jsx';
+
+const SigninSchema = yup.object().shape({
+  username: yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required'),
+  password: yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required'),
+});
 
 const LoginPage = () => {
   const nameInputEl = useRef(null);
@@ -18,6 +24,7 @@ const LoginPage = () => {
       username: '',
       password: '',
     },
+    validationSchema: SigninSchema,
     onSubmit: (values) => {
       const { username, password } = values;
       axios.post('/v1/api/login', { username, password })
@@ -54,6 +61,8 @@ const LoginPage = () => {
                   onChange={formik.handleChange}
                   value={formik.values.username}
                 />
+                {formik.errors.username && formik.touched.username
+                  ? <p>{formik.errors.username}</p> : null}
               </Form.Group>
               <Form.Group className="mb-3" controlId="password">
                 <Form.Control
@@ -66,6 +75,8 @@ const LoginPage = () => {
                   onChange={formik.handleChange}
                   value={formik.values.password}
                 />
+                {formik.errors.password && formik.touched.password
+                  ? <p>{formik.errors.password}</p> : null}
                 <div style={feedbackStyle} className="invalid-feedback">the username or password is incorrect</div>
               </Form.Group>
 
