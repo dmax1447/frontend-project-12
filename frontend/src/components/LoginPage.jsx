@@ -7,8 +7,8 @@ import * as yup from 'yup';
 import useAuth from '../hooks/index.jsx';
 
 const SigninSchema = yup.object().shape({
-  username: yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required'),
-  password: yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Required'),
+  username: yup.string().min(3, 'Слишком короткий').max(50, 'Слишком длинный').required('Обязательно'),
+  password: yup.string().min(6, 'Слишком короткий').max(50, 'Слишком длинный').required('Обязательно'),
 });
 
 const LoginPage = () => {

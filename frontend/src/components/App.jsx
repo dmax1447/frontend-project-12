@@ -9,7 +9,7 @@ import {
 
 import MainPage from './MainPage';
 import LoginPage from './LoginPage';
-import NotFoundPage from './NotFoundPage';
+import ErrorPage from './ErrorPage';
 import AuthContext from '../contexts/index.jsx';
 // import useAuth from '../hooks/index.jsx';
 
@@ -51,9 +51,9 @@ const App = () => (
         </nav>
         <div className="container-fluid h-100">
           <Routes>
-            <Route path="/" element={<MainPage />} />
+            <Route path="/" element={<MainPage />} errorElement={<ErrorPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="*" element={<NotFoundPage />} />
+            <Route path="*" element={<ErrorPage />} />
           </Routes>
 
         </div>
