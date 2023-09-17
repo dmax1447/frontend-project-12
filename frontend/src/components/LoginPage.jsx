@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useFormik } from 'formik';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { Button, Form } from 'react-bootstrap';
 import * as yup from 'yup';
@@ -8,14 +8,13 @@ import useAuth from '../hooks/index.jsx';
 
 const SigninSchema = yup.object().shape({
   username: yup.string().min(3, 'Слишком короткий').max(50, 'Слишком длинный').required('Обязательно'),
-  password: yup.string().min(6, 'Слишком короткий').max(50, 'Слишком длинный').required('Обязательно'),
+  password: yup.string().min(5, 'Слишком короткий').max(50, 'Слишком длинный').required('Обязательно'),
 });
 
 const LoginPage = () => {
   const nameInputEl = useRef(null);
   const passwordInputEl = useRef(null);
   const [authState, setAuthState] = useState('ready');
-  const location = useLocation();
   const navigate = useNavigate();
   const auth = useAuth();
 
@@ -27,13 +26,13 @@ const LoginPage = () => {
     validationSchema: SigninSchema,
     onSubmit: (values) => {
       const { username, password } = values;
-      axios.post('/v1/api/login', { username, password })
+      axios.post('/api/v1/login', { username, password })
         .then((r) => {
           setAuthState('success');
           const { token } = r.data;
           auth.logIn();
-          localStorage.setItem('userId', JSON.stringify({ token }));
-          navigate(location?.state?.from?.pathname || '/');
+          localStorage.setItem('userToken', token);
+          navigate('/');
         })
         .catch(() => {
           setAuthState('error');
@@ -41,6 +40,9 @@ const LoginPage = () => {
     },
   });
   const feedbackStyle = { display: authState === 'error' ? 'block' : 'none' };
+  useEffect(() => {
+    nameInputEl.current.focus();
+  }, []);
 
   return (
     <div className="row justify-content-center align-content-center h-100">
@@ -52,32 +54,34 @@ const LoginPage = () => {
             </div>
             <Form onSubmit={formik.handleSubmit} className="col-12 col-md-6 mt-3 mt-mb-0">
               <h1 className="text-center mb-4">Войти</h1>
-              <Form.Group className="mb-3" controlId="username">
+              <Form.Group className="mb-3 form-floating" controlId="username">
                 <Form.Control
                   type="text"
                   name="username"
                   placeholder="Ваш ник"
                   required
-                  isInvalid={formik.errors.username && formik.touched.username}
+                  isInvalid={(formik.errors.username && formik.touched.username) || authState === 'error'}
                   ref={nameInputEl}
                   onChange={formik.handleChange}
                   value={formik.values.username}
                 />
+                <Form.Label>Ваш ник</Form.Label>
                 {formik.errors.username && formik.touched.username
                   ? <p>{formik.errors.username}</p> : null}
               </Form.Group>
-              <Form.Group className="mb-3" controlId="password">
+              <Form.Group className="mb-3 form-floating" controlId="password">
                 <Form.Control
                   autoComplete="current-password"
                   type="password"
                   name="password"
                   placeholder="Пароль"
                   required
-                  isInvalid={formik.errors.password && formik.touched.password}
+                  isInvalid={(formik.errors.password && formik.touched.password) || authState === 'error'}
                   ref={passwordInputEl}
                   onChange={formik.handleChange}
                   value={formik.values.password}
                 />
+                <Form.Label>Пароль</Form.Label>
                 {formik.errors.password && formik.touched.password
                   ? <p>{formik.errors.password}</p> : null}
                 <div style={feedbackStyle} className="invalid-tooltip">
