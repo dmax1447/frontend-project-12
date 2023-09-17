@@ -1,14 +1,20 @@
-const ErrorPage = () => (
+import {
+  Link,
+} from 'react-router-dom';
 
-  <div className="row justify-content-center align-content-center h-100">
-    <div className="col-12 col-md-8 col-xxl-6">
-      <div className="card shadow-sm">
-        <div className="card-body row p-5">
-          <h1>Oops!</h1>
-          <p> 404 page not Found.</p>
-        </div>
-      </div>
-    </div>
+const ErrorPage = () => (
+  <div className="text-center">
+    <img
+      alt="Страница не найдена"
+      className="img-fluid h-25"
+      width="310"
+      src="https://cdn2.hexlet.io/assets/error-pages/404-4b6ef16aba4c494d8101c104236304e640683fa9abdb3dd7a46cab7ad05d46e9.svg"
+    />
+    <h1 className="h4 text-muted">Страница не найдена</h1>
+    <p className="text-muted">
+      <span>Но вы можете перейти </span>
+      <Link to="/">на главную страницу</Link>
+    </p>
   </div>
 );
 
