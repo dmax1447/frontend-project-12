@@ -1,9 +1,4 @@
-import { useSelector } from 'react-redux';
-import { messagesByChannel } from '../slices/messagesSlice';
-
-const Messages = ({ activeChannelId }) => {
-  const channelMessages = useSelector(messagesByChannel(activeChannelId));
-
+const Messages = ({ activeChannel, messages }) => {
   const getMessageNode = (message) => (
     <div className="text-break mb-2" key={message.id}>
       <b>{message.username}</b>
@@ -18,16 +13,16 @@ const Messages = ({ activeChannelId }) => {
       <div className="d-flex flex-column h-100">
         <div className="bg-light mb-4 p-3 shadow-sm small">
           <p className="m-0">
-            <b># general</b>
+            <b>{activeChannel.name}</b>
           </p>
           <span className="text-muted">
-            {channelMessages.length}
+            {messages.length}
             {' '}
-            сообщения
+            сообщений
           </span>
         </div>
         <div id="messages-box" className="chat-messages overflow-auto px-5 ">
-          {channelMessages.map(getMessageNode)}
+          {messages.map(getMessageNode)}
         </div>
         <div className="mt-auto px-5 py-3">
           <form noValidate="" className="py-1 border rounded-2">

@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addChannels } from '../slices/channelsSlice.js';
-import { addMessages } from '../slices/messagesSlice.js';
+import { addMessages, messagesByChannel } from '../slices/messagesSlice.js';
 import Channels from './Channels';
 import Messages from './Messages';
 
 const MainPage = () => {
   const dispatch = useDispatch();
-  const [activeChannelId, setActiveChannelId] = useState(1);
+  const [activeChannel, setActiveChannel] = useState(1);
 
   useEffect(() => {
     const token = localStorage.getItem('userToken');
@@ -18,20 +18,24 @@ const MainPage = () => {
       },
     })
       .then((r) => {
-        const { channels, messages } = r.data;
+        const { channels, messages, currentChannelId } = r.data;
         dispatch(addChannels(channels));
         dispatch(addMessages(messages));
+        const storedActiveChannel = channels.find((item) => item.id === currentChannelId);
+        setActiveChannel(storedActiveChannel);
       })
       .catch((e) => {
         console.log(e);
       });
   }, []);
 
+  const channelMessages = useSelector(messagesByChannel(activeChannel.id));
+
   return (
     <div className="container h-100 my-4 overflow-hidden rounded shadow">
       <div className="row h-100 bg-white flex-md-row">
-        <Channels activeChannelId={activeChannelId} setActiveChannel={setActiveChannelId} />
-        <Messages activeChannelId={activeChannelId} />
+        <Channels activeChannelId={activeChannel.id} setActiveChannel={setActiveChannel} />
+        <Messages activeChannel={activeChannel} messages={channelMessages} />
       </div>
 
     </div>

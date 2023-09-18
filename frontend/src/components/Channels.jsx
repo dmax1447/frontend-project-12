@@ -14,7 +14,7 @@ const Channels = ({ activeChannelId, setActiveChannel }) => {
         <button
           type="button"
           className={className}
-          onClick={() => setActiveChannel(channel.id)}
+          onClick={() => setActiveChannel(channel)}
         >
           <span className="me-1">#</span>
           {channel.name}
