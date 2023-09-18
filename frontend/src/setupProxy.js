@@ -4,7 +4,7 @@ module.exports = function setup(app) {
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'http://localhost:5001',
+      target: 'https://frontend-chat-ru.hexlet.app',
       changeOrigin: true,
     }),
   );

@@ -60,23 +60,19 @@ const App = () => {
               <Link className="navbar-brand" to="/">Hexlet CHAT</Link>
             </div>
           </nav>
-          <div className="container-fluid h-100">
-            <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route
-                path="/"
-                element={(
-                  <PrivateRoute>
-                    <MainPage />
-                  </PrivateRoute>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route
+              path="/"
+              element={(
+                <PrivateRoute>
+                  <MainPage />
+                </PrivateRoute>
                 )}
-                errorElement={<ErrorPage />}
-              />
-              <Route path="*" element={<ErrorPage />} />
-            </Routes>
-
-          </div>
-
+              errorElement={<ErrorPage />}
+            />
+            <Route path="*" element={<ErrorPage />} />
+          </Routes>
         </main>
 
       </Router>
