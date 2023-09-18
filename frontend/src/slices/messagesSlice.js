@@ -19,7 +19,6 @@ export const messagesByChannel = createSelector(
   [
     (channelId) => channelId,
   ],
-  // Output selector gets (`items, category)` as args
   (channelId) => (state) => Object
     .values(state.messages.entities)
     .filter((message) => message.channelId === channelId),
