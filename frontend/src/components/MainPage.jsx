@@ -1,7 +1,11 @@
 import { useEffect } from 'react';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { actions } from '../slices/channelsSlice.js';
 
 const MainPage = () => {
+  const dispatch = useDispatch();
+  console.log('actions', actions);
   useEffect(() => {
     const token = localStorage.getItem('userToken');
     axios.get('/api/v1/data', {
@@ -10,7 +14,8 @@ const MainPage = () => {
       },
     })
       .then((r) => {
-        console.log(r.data);
+        const { channels } = r.data;
+        dispatch(actions.addChannels(channels));
       })
       .catch((e) => {
         console.log(e);
