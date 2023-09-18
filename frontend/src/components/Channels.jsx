@@ -1,9 +1,9 @@
-import { useSelector } from 'react-redux';
 import cn from 'classnames';
-import { selectors } from '../slices/channelsSlice';
+import { useSelector } from 'react-redux';
+import { selectAll } from '../slices/channelsSlice';
 
 const Channels = ({ activeChannelId, setActiveChannel }) => {
-  const channelsList = useSelector(selectors.selectAll);
+  const channelsList = useSelector(selectAll);
 
   const getChannel = (channel) => {
     const className = cn('w-100', 'rounded-0', 'text-start', 'btn', {
