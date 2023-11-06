@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import '../assets/styles/application.scss';
 import {
   BrowserRouter as Router,
@@ -44,44 +44,32 @@ const PrivateRoute = ({ children }) => {
   );
 };
 
-const App = () => {
-  useEffect(() => {
-    console.log('run once');
-    const token = localStorage.getItem('userToken');
-    console.log({ token });
-  }, []);
-
-  return (
-    <AuthProvider>
-      <Router>
-        <main className="d-flex flex-column h-100">
-          <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
-            <div className="container">
-              <Link className="navbar-brand" to="/">Hexlet CHAT</Link>
-            </div>
-          </nav>
-          <div className="container-fluid h-100">
-            <Routes>
-              <Route path="/login" element={<LoginPage />} />
-              <Route
-                path="/"
-                element={(
-                  <PrivateRoute>
-                    <MainPage />
-                  </PrivateRoute>
-                )}
-                errorElement={<ErrorPage />}
-              />
-              <Route path="*" element={<ErrorPage />} />
-            </Routes>
-
+const App = () => (
+  <AuthProvider>
+    <Router>
+      <main className="d-flex flex-column h-100">
+        <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
+          <div className="container">
+            <Link className="navbar-brand" to="/">Hexlet CHAT</Link>
           </div>
+        </nav>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route
+            path="/"
+            element={(
+              <PrivateRoute>
+                <MainPage />
+              </PrivateRoute>
+                )}
+            errorElement={<ErrorPage />}
+          />
+          <Route path="*" element={<ErrorPage />} />
+        </Routes>
+      </main>
 
-        </main>
-
-      </Router>
-    </AuthProvider>
-  );
-};
+    </Router>
+  </AuthProvider>
+);
 
 export default App;
