@@ -27,7 +27,7 @@ const MainPage = () => {
       .catch((e) => {
         console.log(e);
       });
-  }, []);
+  }, [dispatch]);
 
   const channelMessages = useSelector(messagesByChannel(activeChannel.id));
 
