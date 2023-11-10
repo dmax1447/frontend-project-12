@@ -7,12 +7,6 @@ import { addMessages, messagesByChannel } from '../slices/messagesSlice.js';
 import Channels from './Channels';
 import Messages from './Messages';
 
-const sampleMessage = {
-  body: 'body',
-  channelId: 1,
-  username: 'max',
-};
-
 const MainPage = () => {
   const dispatch = useDispatch();
   const [activeChannel, setActiveChannel] = useState(1);
@@ -29,7 +23,6 @@ const MainPage = () => {
     socket.on('newMessage', (message) => {
       console.log(1, message);
     });
-    socket.emit('newMessage', sampleMessage);
 
     axios.get('/api/v1/data', {
       headers: {
