@@ -1,17 +1,36 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { io } from 'socket.io-client';
 import { useDispatch, useSelector } from 'react-redux';
 import { addChannels } from '../slices/channelsSlice.js';
 import { addMessages, messagesByChannel } from '../slices/messagesSlice.js';
 import Channels from './Channels';
 import Messages from './Messages';
 
+const sampleMessage = {
+  body: 'body',
+  channelId: 1,
+  username: 'max',
+};
+
 const MainPage = () => {
   const dispatch = useDispatch();
   const [activeChannel, setActiveChannel] = useState(1);
 
   useEffect(() => {
+    console.log('run effect');
     const token = localStorage.getItem('userToken');
+    const socket = io('ws://localhost:5001/', {
+      auth: {
+        token,
+      },
+    });
+
+    socket.on('newMessage', (message) => {
+      console.log(1, message);
+    });
+    socket.emit('newMessage', sampleMessage);
+
     axios.get('/api/v1/data', {
       headers: {
         Authorization: `Bearer ${token}`,
