@@ -8,7 +8,7 @@ import useAuth from '../hooks/index.jsx';
 
 const SigninSchema = yup.object().shape({
   username: yup.string().min(3, 'Слишком короткий').max(50, 'Слишком длинный').required('Обязательно'),
-  password: yup.string().min(5, 'Слишком короткий').max(50, 'Слишком длинный').required('Обязательно'),
+  password: yup.string().min(3, 'Слишком короткий').max(50, 'Слишком длинный').required('Обязательно'),
 });
 
 const LoginPage = () => {
@@ -30,8 +30,9 @@ const LoginPage = () => {
         .then((r) => {
           setAuthState('success');
           const { token } = r.data;
-          auth.logIn();
+          auth.logIn(username);
           localStorage.setItem('userToken', token);
+          localStorage.setItem('userName', username);
           navigate('/');
         })
         .catch(() => {

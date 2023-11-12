@@ -1,4 +1,22 @@
-const Messages = ({ activeChannel, messages }) => {
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+
+const messageSchema = yup.object().shape({
+  body: yup.string().required('Обязательно'),
+});
+
+const Messages = ({ activeChannel, messages, sendMessage }) => {
+  const formik = useFormik({
+    initialValues: {
+      body: '',
+    },
+    validationSchema: messageSchema,
+    onSubmit: (values) => {
+      const { body } = values;
+      sendMessage(body);
+    },
+  });
+
   const getMessageNode = (message) => (
     <div className="text-break mb-2" key={message.id}>
       <b>{message.username}</b>
@@ -25,14 +43,15 @@ const Messages = ({ activeChannel, messages }) => {
           {messages.map(getMessageNode)}
         </div>
         <div className="mt-auto px-5 py-3">
-          <form noValidate="" className="py-1 border rounded-2">
+          <form noValidate="" className="py-1 border rounded-2" onSubmit={formik.handleSubmit}>
             <div className="input-group has-validation">
               <input
                 name="body"
                 aria-label="Новое сообщение"
                 placeholder="Введите сообщение..."
                 className="border-0 p-0 ps-2 form-control"
-                defaultValue=""
+                value={formik.values.body}
+                onChange={formik.handleChange}
               />
               <button
                 type="submit"
