@@ -11,9 +11,10 @@ const Messages = ({ activeChannel, messages, sendMessage }) => {
       body: '',
     },
     validationSchema: messageSchema,
-    onSubmit: (values) => {
+    onSubmit: (values, { resetForm }) => {
       const { body } = values;
       sendMessage(body);
+      resetForm();
     },
   });
 

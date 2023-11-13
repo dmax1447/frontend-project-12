@@ -14,10 +14,6 @@ const socket = io('http://localhost:3000', {
     token,
   },
 });
-socket.on('newMessage', (message) => {
-  console.log('receive message', message);
-  addMessages([message]);
-});
 
 const MainPage = () => {
   const dispatch = useDispatch();
@@ -47,6 +43,10 @@ const MainPage = () => {
         dispatch(addMessages(messages));
         const storedActiveChannel = channels.find((item) => item.id === currentChannelId);
         setActiveChannel(storedActiveChannel);
+        socket.on('newMessage', (message) => {
+          console.log('receive message', message);
+          dispatch(addMessage(message));
+        });
       })
       .catch((e) => {
         console.log(e);
